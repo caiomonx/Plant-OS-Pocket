@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Global root background ─────────────────────────────────────────────────
+   Ensures the dark navy fills the entire viewport/page in all scenarios,
+   including areas not covered by any component (visible on scroll/overflow).
+───────────────────────────────────────────────────────────────────────────── */
+html,
+body,
+#root {
+  background-color: #091525;
+  min-height: 100%;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar {
+  display: none;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+/* D3.6 Ported Styles */
+.glass-panel {
+  background: rgba(24, 24, 27, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* ── Landing Page Animations ─────────────────────────────────────────────────
+   Keyframe global para o efeito de flutuação holográfica.
+   Definido aqui (e não inline no JSX) para evitar re-injeção no DOM
+   a cada render do componente.
+─────────────────────────────────────────────────────────────────────────── */
+@keyframes holoFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-15px) rotate(0.8deg); }
+}
+
+/* ── Staggered Entrance Animations ─────────────────────────────────────── */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-reveal {
+  animation: fadeSlideUp 0.5s ease-out both;
+}
+
+.stagger-reveal-1 { animation-delay: 150ms; }
+.stagger-reveal-2 { animation-delay: 300ms; }
+.stagger-reveal-3 { animation-delay: 450ms; }
+.stagger-reveal-card { animation: fadeSlideUp 0.45s ease-out both; }
+
+/* #8 FIX: respeita preferência de acessibilidade do sistema operacional.
+   Usuários com sensibilidade a movimento (vestibular disorders, epilepsia)
+   precisam que animações sejam desativadas quando 'Reduzir movimento' está ativo. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── MÓDULO DE SALA DE PARTO - ANIMAÇÕES E KEYFRAMES OTIMIZADOS ── */
+@keyframes pulse-heater {
+  0%, 100% { opacity: 0.12; filter: drop-shadow(0 0 10px rgba(244,63,94,0.3)); }
+  50% { opacity: 0.28; filter: drop-shadow(0 0 25px rgba(244,63,94,0.6)); }
+}
+
+@keyframes pulse-cold {
+  0%, 100% { border-color: rgba(6,182,212,0.1); box-shadow: inset 0 0 15px rgba(6,182,212,0.03); }
+  50% { border-color: rgba(6,182,212,0.25); box-shadow: inset 0 0 30px rgba(6,182,212,0.08); }
+}
+
+@keyframes ripple-ausculta {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes chest-expand {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
+
+@keyframes massage-hands {
+  0%, 100% { transform: translate(-50%, -46%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -54%) scale(0.92); opacity: 0.98; }
+}
+
+@keyframes progress-loading {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes breath-container {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float-up-fade-quick {
+  0% { transform: translate(-50%, 0px) scale(0.9); opacity: 0; }
+  10% { transform: translate(-50%, -10px) scale(1); opacity: 1; }
+  75% { transform: translate(-50%, -20px) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -35px) scale(0.85); opacity: 0; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4); }
+  70% { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 0 0 10px rgba(20, 184, 166, 0); }
+  100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+}
+
+@keyframes pulse-ring-tactile {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+  100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; box-shadow: 0 0 0 25px rgba(245, 158, 11, 0); }
+}
+
+@keyframes pulse-ring-cyan {
+  0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.2); }
+  70% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+}
+
+@keyframes video-progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@keyframes click-ripple {
+  0% { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.animate-breath {
+  animation: chest-expand 2.2s ease-in-out infinite;
+}
+
+.animate-massage {
+  animation: massage-hands 0.5s ease-in-out infinite;
+}
+
+.animate-breath-container {
+  animation: breath-container 3s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+/* Animações de Ciclos Bloqueantes (VPP e RCP) */
+@keyframes lung-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(6,182,212,0.3)); }
+  33% { transform: scale(1.12); filter: drop-shadow(0 0 25px rgba(6,182,212,0.7)); }
+  66% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(6,182,212,0.3)); }
+}
+
+@keyframes heart-massage-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(244,63,94,0.4)); }
+  50% { transform: scale(0.88) translateY(2px); filter: drop-shadow(0 0 25px rgba(244,63,94,0.75)); }
+}
+
+.animate-lung-cycle {
+  animation: lung-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-heart-massage-cycle {
+  animation: heart-massage-pulse 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+}
+
+/* Animação do Coração Holográfico de Ausculta Ciano (Estilo Sístole/Diástole Fisiológica) */
+@keyframes holographic-heart-beat {
+  0%, 100% {
+    transform: scale(0.95);
+    filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.45));
+    opacity: 0.85;
+  }
+  25% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.95));
+    opacity: 1;
+  }
+  45% {
+    transform: scale(0.98);
+    filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.6));
+    opacity: 0.9;
+  }
+}
+
+.animate-holographic-heart {
+  animation: holographic-heart-beat 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  transform-origin: center center;
+  will-change: transform, filter, opacity;
+}
+
+/* Otimização de Toque Rápido Mobile e Prevenção de Zoom */
+button, 
+a,
+.touch-interactive {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Aceleração Gráfica por Hardware (GPU) */
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+/* ── Sistema de Favoritos - Micro-animação Premium ─────────────────────────── */
+@keyframes favoritePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.95)); }
+  100% { transform: scale(1.1); }
+}
+
+.animate-favorite {
+  animation: favoritePop 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
