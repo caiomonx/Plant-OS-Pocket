@@ -7,7 +7,7 @@ const HISTORY_STORAGE_KEY = 'antigravity_antibio_history';
 const ARCADE_BAG_KEY = 'antigravity_antibio_arcade_bag';
 
 // Data Gênesis (Dia 1) retroativa para o usuário ter alguns casos liberados hoje
-const START_DATE = new Date('2026-05-16T00:00:00').getTime();
+const START_DATE = new Date('2026-05-28T00:00:00').getTime();
 
 export function useAntibioChallenge(mode = 'daily', historyReplayCaseId = null) {
   const [caseData, setCaseData] = useState(null);

@@ -6,7 +6,7 @@ import { ECG_HISTORY_KEY, getEcgHistory } from '../utils/ecgStats';
 const ARCADE_BAG_KEY = 'antigravity_ecg_arcade_bag';
 
 // Data Gênesis (Dia 1) - 10 de Maio de 2026 (hoje, 12/05, será o Dia 3)
-const START_DATE = new Date('2026-05-10T00:00:00').getTime();
+const START_DATE = new Date('2026-05-28T00:00:00').getTime();
 
 export function useEcgChallenge() {
   const [caseData, setCaseData] = useState(null);

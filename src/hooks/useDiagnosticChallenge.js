@@ -8,7 +8,7 @@ const HISTORY_STORAGE_KEY = 'antigravity_diagnostic_history';
 const ARCADE_BAG_KEY = 'antigravity_arcade_bag';
 
 // Data Gênesis (Dia 1) retroativa para o usuário ter 8 casos liberados hoje
-const START_DATE = new Date('2026-04-10T00:00:00').getTime();
+const START_DATE = new Date('2026-05-28T00:00:00').getTime();
 
 export function useDiagnosticChallenge(mode = 'daily', historyReplayCaseId = null) {
   const [caseData, setCaseData] = useState(null);

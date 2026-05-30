@@ -5,7 +5,7 @@ const ARCADE_BAG_KEY = 'antigravity_imagiology_arcade_bag';
 const IMAGIOLOGY_HISTORY_KEY = 'imagiology_challenge_history';
 
 // Data Gênesis (Dia 1) - 14 de Maio de 2026
-const START_DATE = new Date('2026-05-14T00:00:00').getTime();
+const START_DATE = new Date('2026-05-28T00:00:00').getTime();
 
 export function useImagiologyChallenge() {
   const [caseData, setCaseData] = useState(null);

@@ -76,6 +76,13 @@ export default function ImagiologyChallengePage() {
       loadHistoryReplay(caseId);
     };
 
+    // Sincroniza reativamente o modo visual da página com o modo ativo real do hook de desafio
+    React.useEffect(() => {
+        if (activeMode && activeMode !== mode && mode !== 'history') {
+            setMode(activeMode);
+        }
+    }, [activeMode, mode]);
+
     return (
         <div className="h-screen bg-slate-950 text-slate-200 overflow-hidden flex flex-col font-sans">
             
@@ -160,7 +167,7 @@ export default function ImagiologyChallengePage() {
                         <div className="flex-1 min-h-[400px] flex flex-col lg:flex-row gap-6 pb-6">
                             
                             {/* Left Column (Image + Contextual Post-Game Hint) */}
-                            <div className="flex-1 flex flex-col gap-4">
+                            <div className="flex-1 flex flex-col gap-4 min-w-0">
                                 <div className="flex-1 relative border border-slate-800 rounded-2xl overflow-hidden bg-black shadow-2xl min-h-[65vh] lg:min-h-[50vh] lg:h-auto group">
                                     {caseData?.imageUrl ? (
                                     <ImagiologyInteractiveCanvas 
