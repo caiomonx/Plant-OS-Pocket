@@ -18,7 +18,11 @@ export function useImagiologyChallenge() {
   const [replayCaseId, setReplayCaseId] = useState(null);
   
   const getCurrentDayNumber = () => {
-    return 3;
+    const today = new Date().getTime();
+    const dif = today - START_DATE;
+    let days = Math.floor(dif / (1000 * 3600 * 24)) + 1;
+    if (days < 1) days = 1;
+    return days;
   };
 
   const getHistory = () => {
@@ -259,7 +263,7 @@ export function useImagiologyChallenge() {
 
   // Compute stats from history (cached single parse)
   const stats = (() => {
-      const history = getHistory().filter(h => h.dayNumber <= 3 && (h.status === 'won' || h.status === 'lost'));
+      const history = getHistory().filter(h => h.status === 'won' || h.status === 'lost');
       const totalPlayed = history.length;
       const totalWins = history.filter(h => h.status === 'won').length;
       const totalLosses = history.filter(h => h.status === 'lost').length;

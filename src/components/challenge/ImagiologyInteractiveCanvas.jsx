@@ -115,9 +115,8 @@ export default function ImagiologyInteractiveCanvas({
         if (zoom <= 1) return;
         setIsDragging(true);
         dragMoved.current = false;
-        dragStart.current = { x: e.clientX, y: e.clientY };
+        dragStart.current = { x: e.clientX, y: e.clientY, pointerId: e.pointerId };
         panStart.current = { ...pan };
-        e.currentTarget.setPointerCapture(e.pointerId);
     };
 
     const handlePointerMove = (e) => {
@@ -129,18 +128,23 @@ export default function ImagiologyInteractiveCanvas({
         const dy = e.clientY - dragStart.current.y;
 
         if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-            dragMoved.current = true;
+            if (!dragMoved.current) {
+                dragMoved.current = true;
+                e.currentTarget.setPointerCapture(dragStart.current.pointerId);
+            }
         }
 
-        const rect = container.getBoundingClientRect();
-        // Convert pixel delta to percentage of container
-        const percentX = (dx / rect.width) * 100;
-        const percentY = (dy / rect.height) * 100;
+        if (dragMoved.current) {
+            const rect = container.getBoundingClientRect();
+            // Convert pixel delta to percentage of container
+            const percentX = (dx / rect.width) * 100;
+            const percentY = (dy / rect.height) * 100;
 
-        setPan(clampPan({
-            x: panStart.current.x + percentX,
-            y: panStart.current.y + percentY,
-        }, zoom));
+            setPan(clampPan({
+                x: panStart.current.x + percentX,
+                y: panStart.current.y + percentY,
+            }, zoom));
+        }
     };
 
     const handlePointerUp = () => {

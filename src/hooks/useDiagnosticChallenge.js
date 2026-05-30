@@ -21,7 +21,11 @@ export function useDiagnosticChallenge(mode = 'daily', historyReplayCaseId = nul
 
   // Calcula quantos dias se passaram a partir do dia 1
   const getCurrentDayNumber = () => {
-    return 3;
+    const today = new Date().getTime();
+    const dif = today - START_DATE;
+    let days = Math.floor(dif / (1000 * 3600 * 24)) + 1;
+    if (days < 1) days = 1;
+    return days;
   };
 
   const getHistory = () => {
