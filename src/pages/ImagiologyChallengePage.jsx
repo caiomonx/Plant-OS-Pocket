@@ -29,10 +29,6 @@ export default function ImagiologyChallengePage() {
     const [showAfterImage, setShowAfterImage] = useState(true);
     const [showPins, setShowPins] = useState(true);
 
-    if (!challenge.isLoaded) {
-        return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-500">Carregando...</div>;
-    }
-
     const { 
         caseData, 
         status, 
@@ -47,8 +43,20 @@ export default function ImagiologyChallengePage() {
         loadDaily,
         loadArcade,
         loadHistoryReplay,
-        resetArcade
+        resetArcade,
+        isLoaded
     } = challenge;
+
+    // Sincroniza reativamente o modo visual da página com o modo ativo real do hook de desafio
+    React.useEffect(() => {
+        if (activeMode && activeMode !== mode && mode !== 'history') {
+            setMode(activeMode);
+        }
+    }, [activeMode, mode]);
+
+    if (!isLoaded) {
+        return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-500">Carregando...</div>;
+    }
 
     // Clinical case hint: revealed after first life lost (lives < 3)
     const showClinicalHint = lives < 3 && status === 'playing';
@@ -76,12 +84,6 @@ export default function ImagiologyChallengePage() {
       loadHistoryReplay(caseId);
     };
 
-    // Sincroniza reativamente o modo visual da página com o modo ativo real do hook de desafio
-    React.useEffect(() => {
-        if (activeMode && activeMode !== mode && mode !== 'history') {
-            setMode(activeMode);
-        }
-    }, [activeMode, mode]);
 
     return (
         <div className="h-screen bg-slate-950 text-slate-200 overflow-hidden flex flex-col font-sans">

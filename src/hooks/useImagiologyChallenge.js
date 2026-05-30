@@ -8,15 +8,6 @@ const IMAGIOLOGY_HISTORY_KEY = 'imagiology_challenge_history';
 const START_DATE = new Date('2026-05-28T00:00:00').getTime();
 
 export function useImagiologyChallenge() {
-  const [caseData, setCaseData] = useState(null);
-  const [lives, setLives] = useState(3);
-  const [foundIndices, setFoundIndices] = useState([]);
-  const [failedAttempts, setFailedAttempts] = useState([]); // para desenhar o X vermelho onde errou
-  const [status, setStatus] = useState('playing'); // 'playing', 'won', 'lost'
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [activeMode, setActiveMode] = useState('daily'); // 'daily', 'arcade', 'history_replay'
-  const [replayCaseId, setReplayCaseId] = useState(null);
-  
   const getCurrentDayNumber = () => {
     const today = new Date().getTime();
     const dif = today - START_DATE;
@@ -28,12 +19,52 @@ export function useImagiologyChallenge() {
   const getHistory = () => {
       try {
           const stored = localStorage.getItem(IMAGIOLOGY_HISTORY_KEY);
-          return stored ? JSON.parse(stored) : [];
+          if (!stored) return [];
+          const parsed = JSON.parse(stored);
+          return Array.isArray(parsed) ? parsed : [];
       } catch (err) {
           return [];
       }
   };
 
+  // Inicialização do estado diretamente para o modo diário
+  const dayNumber = getCurrentDayNumber();
+  const maxGlobalIndex = imagiologyCases.length - 1;
+  const safeDayIndex = Math.min(dayNumber - 1, maxGlobalIndex);
+  const initialDailyCase = imagiologyCases[safeDayIndex] ? { ...imagiologyCases[safeDayIndex] } : null;
+
+  const getInitialDailyState = () => {
+    if (!initialDailyCase) {
+      return { lives: 3, foundIndices: [], failedAttempts: [], status: 'playing' };
+    }
+    const history = getHistory();
+    const run = history.find(h => h.caseId === initialDailyCase.id && h.dayNumber === dayNumber);
+    if (run) {
+      return {
+        lives: run.lives !== undefined ? run.lives : 3,
+        foundIndices: run.foundIndices || [],
+        failedAttempts: run.failedAttempts || [],
+        status: run.status || 'playing'
+      };
+    }
+    return {
+      lives: 3,
+      foundIndices: [],
+      failedAttempts: [],
+      status: 'playing'
+    };
+  };
+
+  const initialDailyState = getInitialDailyState();
+
+  const [caseData, setCaseData] = useState(initialDailyCase);
+  const [lives, setLives] = useState(initialDailyState.lives);
+  const [foundIndices, setFoundIndices] = useState(initialDailyState.foundIndices);
+  const [failedAttempts, setFailedAttempts] = useState(initialDailyState.failedAttempts);
+  const [status, setStatus] = useState(initialDailyState.status);
+  const [isLoaded, setIsLoaded] = useState(true); // Já inicia carregado
+  const [activeMode, setActiveMode] = useState('daily');
+  
   const saveToHistory = (payload) => {
     try {
        const history = getHistory();
@@ -83,7 +114,6 @@ export function useImagiologyChallenge() {
   const loadCase = useCallback((mode, historyCaseId) => {
     setIsLoaded(false);
     setActiveMode(mode);
-    setReplayCaseId(historyCaseId || null);
     
     const dayNumber = getCurrentDayNumber();
     const maxGlobalIndex = imagiologyCases.length - 1;
@@ -126,10 +156,6 @@ export function useImagiologyChallenge() {
     
     setIsLoaded(true);
   }, []);
-
-  useEffect(() => {
-    loadCase('daily', null);
-  }, [loadCase]);
 
   // Save to history only in daily mode
   useEffect(() => {

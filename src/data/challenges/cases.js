@@ -34,7 +34,7 @@ export const CHALLENGE_CASES = [
       "A família relata história de tabagismo passivo e ativo (50 anos/maço). Há 3 dias iniciou tosse produtiva abundante com escarro amarelo.",
       "Ao exame físico, nota-se tiragem intercostal e tempo expiratório prolongado, com sibilos difusos à ausculta pulmonar.",
       "A oximetria de pulso em ar ambiente marca 85%. O paciente está francamente torporoso (rebaixamento de sensório) em respiração agônica.",
-      "A Gasometria Arterial colhida revela: pH 7.24 (Acidose severa), pCO2 70 mmHg (Hipercapnia) e HCO3 30 mEq/L."
+      "A Gasometria Arterial colhida revela: pH 7.24, pCO2 70 mmHg e HCO3 30 mEq/L."
     ],
     summary: "A Exacerbação Infecciosa da Doença Pulmonar Obstrutiva Crônica (DPOC) descompensa agudamente a mecânica ventilatória do paciente pneumopata. A história crônica de tabagismo associada à mudança recente do escarro (2ª pista) aponta fortemente para um gatilho infeccioso. A tiragem intercostal e sibilos difusos (3ª pista) refletem a iminência de fadiga muscular respiratória. A saturação baixa (85%) e o rebaixamento de sensório (4ª pista) são a tradução clínica da narcose pelo acúmulo letal de dióxido de carbono. A confirmação irrefutável vem na 5ª pista: a gasometria demonstrando pH de 7.24 com pCO2 de 70 mmHg sela o diagnóstico de Acidose Respiratória descompensada, exigindo suporte ventilatório não invasivo (VNI/BiPAP) com urgência extrema."
   },
