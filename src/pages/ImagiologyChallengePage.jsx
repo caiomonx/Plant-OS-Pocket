@@ -28,6 +28,7 @@ export default function ImagiologyChallengePage() {
     const [mode, setMode] = useState('daily');
     const [showAfterImage, setShowAfterImage] = useState(true);
     const [showPins, setShowPins] = useState(true);
+    const imageContainerRef = React.useRef(null);
 
     const { 
         caseData, 
@@ -69,6 +70,15 @@ export default function ImagiologyChallengePage() {
         // Show ephemeral toast with feedback
         setToastMessage({ message: result.message, success: result.success });
         setTimeout(() => setToastMessage(null), 3000);
+    };
+
+    const handleTypeChange = (newType) => {
+        setSelectedType(newType);
+        if (window.innerWidth < 1024) {
+            setTimeout(() => {
+                imageContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
     };
 
     const handleModeSwitch = (newMode) => {
@@ -153,24 +163,33 @@ export default function ImagiologyChallengePage() {
                                     </span>
                                 </div>
                             )}
-
-                            {/* Mobile Active Tool Indicator */}
-                            {status === 'playing' && (
-                                <div className="mt-3 px-4 py-2 bg-slate-800 border border-sky-500/30 rounded-lg flex items-center gap-2 lg:hidden shadow-lg animate-in fade-in slide-in-from-top-2">
-                                    <MapPin className="w-4 h-4 text-sky-400" />
-                                    <span className="text-xs font-bold text-slate-200">
-                                        Procurando: <span className="text-sky-400 uppercase tracking-wider ml-1">{FINDING_TYPES.find(t => t.id === selectedType)?.label}</span>
-                                    </span>
-                                </div>
-                            )}
                         </div>
+
+                        {/* Mobile Selector Area (Only when playing & on mobile) */}
+                        {status === 'playing' && (
+                            <div className="w-full lg:hidden bg-slate-900 border border-slate-700/60 rounded-2xl p-4 shadow-lg mb-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <label className="block text-slate-300 text-xs font-black uppercase tracking-wider mb-2">
+                                    O que você procura?
+                                </label>
+                                <select
+                                    value={selectedType}
+                                    onChange={(e) => handleTypeChange(e.target.value)}
+                                    className="w-full bg-slate-950 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm font-bold focus:outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/50 transition-all cursor-pointer appearance-none"
+                                    style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: `right 0.5rem center`, backgroundRepeat: `no-repeat`, backgroundSize: `1.5em 1.5em`, paddingRight: `2.5rem` }}
+                                >
+                                    {FINDING_TYPES.map(t => (
+                                        <option key={t.id} value={t.id}>{t.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
                         {/* Central Workspace */}
                         <div className="flex-1 min-h-[400px] flex flex-col lg:flex-row gap-6 pb-6">
                             
                             {/* Left Column (Image + Contextual Post-Game Hint) */}
                             <div className="flex-1 flex flex-col gap-4 min-w-0">
-                                <div className="flex-1 relative border border-slate-800 rounded-2xl overflow-hidden bg-black shadow-2xl min-h-[65vh] lg:min-h-[50vh] lg:h-auto group">
+                                <div ref={imageContainerRef} className="flex-1 relative border border-slate-800 rounded-2xl overflow-hidden bg-black shadow-2xl min-h-[65vh] lg:min-h-[50vh] lg:h-auto group">
                                     {caseData?.imageUrl ? (
                                     <ImagiologyInteractiveCanvas 
                                         imageUrl={status !== 'playing' && showAfterImage && caseData.imageUrlAfter ? caseData.imageUrlAfter : caseData.imageUrl}
@@ -276,7 +295,7 @@ export default function ImagiologyChallengePage() {
 
                                 {/* Selector Area (Only when playing) */}
                                 {status === 'playing' ? (
-                                    <div className="bg-slate-900 border border-slate-700 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col justify-center">
+                                    <div className="hidden lg:flex bg-slate-900 border border-slate-700 rounded-2xl p-5 shadow-lg relative overflow-hidden flex-col justify-center">
                                         <div className="absolute top-0 left-0 w-1 bg-slate-500 h-full"></div>
                                         <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
                                             O que você procura?
@@ -286,7 +305,7 @@ export default function ImagiologyChallengePage() {
                                         </p>
                                         <select
                                             value={selectedType}
-                                            onChange={(e) => setSelectedType(e.target.value)}
+                                            onChange={(e) => handleTypeChange(e.target.value)}
                                             className="w-full bg-slate-950 border border-slate-600 rounded-xl px-4 py-3.5 text-white text-base font-medium focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-all shadow-inner appearance-none cursor-pointer"
                                             style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: `right 0.5rem center`, backgroundRepeat: `no-repeat`, backgroundSize: `1.5em 1.5em`, paddingRight: `2.5rem` }}
                                         >
