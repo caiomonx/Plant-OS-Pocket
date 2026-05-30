@@ -29,6 +29,7 @@ export default function ImagiologyChallengePage() {
     const [showAfterImage, setShowAfterImage] = useState(true);
     const [showPins, setShowPins] = useState(true);
     const imageContainerRef = React.useRef(null);
+    const outcomeRef = React.useRef(null);
 
     const { 
         caseData, 
@@ -54,6 +55,15 @@ export default function ImagiologyChallengePage() {
             setMode(activeMode);
         }
     }, [activeMode, mode]);
+
+    // Autoscroll para a seção de resultado no fim de jogo
+    React.useEffect(() => {
+        if (status !== 'playing') {
+            setTimeout(() => {
+                outcomeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+    }, [status]);
 
     if (!isLoaded) {
         return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-500">Carregando...</div>;
@@ -249,18 +259,6 @@ export default function ImagiologyChallengePage() {
                                     </div>
                                 )}
                                 </div>
-
-                                {/* Post-Game Clinical Case (Option A - Rendered below image) */}
-                                {status !== 'playing' && caseData?.clinicalCase && (
-                                    <div className="animate-in fade-in slide-in-from-top-4 duration-500 relative bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-700/80 rounded-2xl p-5 shadow-lg overflow-hidden">
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-sky-500 to-sky-600/30" />
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <Stethoscope className="w-4 h-4 text-sky-400" />
-                                            <span className="text-[10px] font-bold text-sky-400/80 uppercase tracking-[0.2em]">História Clínica</span>
-                                        </div>
-                                        <p className="text-slate-200 text-sm leading-relaxed pl-1">{caseData.clinicalCase}</p>
-                                    </div>
-                                )}
                             </div>
 
                             {/* Right: Controls & Info */}
@@ -319,7 +317,7 @@ export default function ImagiologyChallengePage() {
                                     <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-4">
 
                                         {/* Radiology Outcome Badge */}
-                                        <div className={`relative overflow-hidden rounded-2xl border-2 p-6 text-center shadow-xl ${
+                                        <div ref={outcomeRef} className={`relative overflow-hidden rounded-2xl border-2 p-6 text-center shadow-xl ${
                                             status === 'won'
                                                 ? 'bg-gradient-to-br from-emerald-950/80 via-emerald-900/40 to-slate-900 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
                                                 : 'bg-gradient-to-br from-rose-950/80 via-rose-900/40 to-slate-900 border-rose-500/50 shadow-[0_0_25px_rgba(244,63,94,0.15)]'
@@ -362,7 +360,17 @@ export default function ImagiologyChallengePage() {
                                             </div>
                                         </div>
 
-                                        {/* Removed Clinical Case Card from right column (now below image) */}
+                                        {/* Clinical Case Card (Reordered here: above laudo, below outcome) */}
+                                        {caseData?.clinicalCase && (
+                                            <div className="animate-in fade-in slide-in-from-top-4 duration-500 relative bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-700/80 rounded-2xl p-5 shadow-lg overflow-hidden">
+                                                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-sky-500 to-sky-600/30" />
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <Stethoscope className="w-4 h-4 text-sky-400" />
+                                                    <span className="text-[10px] font-bold text-sky-400/80 uppercase tracking-[0.2em]">História Clínica</span>
+                                                </div>
+                                                <p className="text-slate-200 text-sm leading-relaxed pl-1">{caseData.clinicalCase}</p>
+                                            </div>
+                                        )}
 
                                         {/* Laudo / Explanation Card (styled) */}
                                         <div className="relative bg-gradient-to-br from-slate-800/60 to-slate-900/80 border border-slate-700/50 rounded-2xl p-5 shadow-lg overflow-hidden">
