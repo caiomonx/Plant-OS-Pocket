@@ -27,7 +27,7 @@ export function getHistory() {
  */
 function getPlayedRecords() {
   return getHistory().filter(
-    (record) => record.dayNumber <= 3 && (record.status === 'won' || record.status === 'lost')
+    (record) => record.status === 'won' || record.status === 'lost'
   );
 }
 

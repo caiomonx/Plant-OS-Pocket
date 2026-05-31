@@ -3,6 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Activity, BrainCircuit, Pill, FileImage, ShieldCheck, Trophy, Sparkles, Radiation } from 'lucide-react';
 
+// Data Gênesis (Dia 1) - 10 de Maio de 2026
+const START_DATE = new Date('2026-05-28T00:00:00').getTime();
+
+const getCurrentDayNumber = () => {
+  const today = new Date().getTime();
+  const dif = today - START_DATE;
+  let days = Math.floor(dif / (1000 * 3600 * 24)) + 1;
+  if (days < 1) days = 1;
+  return days;
+};
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const [completedCount, setCompletedCount] = useState(0);
@@ -75,6 +86,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const todayStr = new Date().toDateString();
+    const currentDay = getCurrentDayNumber();
     let completed = 0;
 
     const checkStatus = (key, storageKey) => {
@@ -84,9 +96,9 @@ export default function LandingPage() {
           const history = JSON.parse(stored);
           if (Array.isArray(history)) {
             const todayRun = history.find(h => 
-              (h.dayNumber === 3 || h.date === todayStr) && 
+              (h.dayNumber === currentDay || h.date === todayStr) && 
               (h.status === 'won' || h.status === 'lost')
-            ) || history.find(h => h.dayNumber === 3 || h.date === todayStr);
+            ) || history.find(h => h.dayNumber === currentDay || h.date === todayStr);
             if (todayRun && (todayRun.status === 'won' || todayRun.status === 'lost')) {
               completed++;
               return todayRun.status;

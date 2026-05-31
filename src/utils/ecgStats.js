@@ -12,7 +12,7 @@ export function getEcgHistory() {
 
 function getPlayedRecords() {
   return getEcgHistory().filter(
-    (record) => record.dayNumber <= 3 && (record.status === 'won' || record.status === 'lost')
+    (record) => record.status === 'won' || record.status === 'lost'
   );
 }
 
